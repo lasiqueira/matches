@@ -17,6 +17,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -135,6 +136,20 @@ public class MatchServiceTest {
         assertEquals(2, matches.size());
         assertEquals("m1", matches.get(0).getMatchId());
         assertEquals("m4", matches.get(1).getMatchId());
+
+    }
+
+    @Test
+    @DisplayName("get no Matches")
+    public void getNoMatches() {
+        when(licenseParser.parse(mixedLicenseStringList)).thenReturn(mixedLicenseList);
+        when(matchRepository.findByMatchIdIn(mixedLicenseList.stream().map(License::getId).filter(s -> s.equals("m4")).collect(Collectors.toList()))).thenReturn(new ArrayList<>());
+        when(matchRepository.findByTournamentIdIn(mixedLicenseList.stream().map(License::getId).filter(s -> s.equals("t1")).collect(Collectors.toList()))).thenReturn(new ArrayList<>());
+        when(matchConverter.convert(new ArrayList<>())).thenReturn(new ArrayList<>());
+        List<Match> matches = matchService.getMatches(mixedLicenseStringList);
+        assertNotNull(matches);
+        assertEquals(0, matches.size());
+
 
     }
 }

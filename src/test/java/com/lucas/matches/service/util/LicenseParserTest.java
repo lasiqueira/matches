@@ -70,5 +70,13 @@ public class LicenseParserTest {
 
     }
 
+    @Test
+    @DisplayName("Parse empty license")
+    public void parseEmptyLicense(){
+        String licenseString = "";
+        assertThrows(InvalidLicenseException.class, ()-> licenseParser.parse(List.of(licenseString)));
+
+    }
+
 
 }

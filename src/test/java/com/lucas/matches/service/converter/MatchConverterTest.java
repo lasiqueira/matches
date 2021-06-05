@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,5 +54,14 @@ public class MatchConverterTest {
         assertNotNull(match);
         assertEquals(1, match.size());
         assertNull(match.get(0).getSummaryType());
+    }
+
+    @Test
+    @DisplayName("convert empty List")
+    public void convertEmptyList(){
+        List<Match> match = matchConverter.convert(new ArrayList<>());
+        assertNotNull(match);
+        assertEquals(0, match.size());
+
     }
 }
