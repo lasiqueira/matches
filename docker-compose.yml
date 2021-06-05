@@ -1,0 +1,13 @@
+version: '3'
+services:
+  matches:
+    image: matches:0.0.1-SNAPSHOT
+    ports:
+      - "8080:8080"
+    links:
+      - "mongodb"
+  mongodb:
+    image: mongo:latest
+    container_name: "mongo-matches"
+    ports:
+      - 27017:27017

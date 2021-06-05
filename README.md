@@ -2,6 +2,30 @@
 
 Matches SpringBoot Service
 
+# Instructions
+
+## Setup
+You need:
+
+[JDK16+](https://jdk.java.net/)
+
+[Gradle 7.0.2+](https://gradle.org/releases/)
+(Alternatively you can use the gradle wrapper with `gradlew` instead of the `gradle` command)
+
+to build and run this project.
+
+## Building
+
+Run `gradle clean build` in the command line interface.
+
+Run `gradle bootBuildImage` in the command line interface.
+
+## Testing
+Run `gradle test` in the command line interface.
+
+## Running
+Run `docker-compose up` in the command line interface.
+
 # description
 
 ## Task
