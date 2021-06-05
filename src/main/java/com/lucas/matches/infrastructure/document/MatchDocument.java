@@ -15,12 +15,12 @@ public class MatchDocument {
     private String playerA;
     private String playerB;
     private LocalDateTime startDate;
-    private SummaryType summaryType;
+    private SummaryTypeDocument summaryType;
 
     public MatchDocument() {
     }
 
-    public MatchDocument(String id, String tournamentId, String matchId, String playerA, String playerB, LocalDateTime startDate, SummaryType summaryType) {
+    public MatchDocument(String id, String tournamentId, String matchId, String playerA, String playerB, LocalDateTime startDate, SummaryTypeDocument summaryType) {
         this.id = id;
         this.tournamentId = tournamentId;
         this.matchId = matchId;
@@ -78,11 +78,11 @@ public class MatchDocument {
         this.startDate = startDate;
     }
 
-    public SummaryType getSummaryType() {
+    public SummaryTypeDocument getSummaryType() {
         return summaryType;
     }
 
-    public void setSummaryType(SummaryType summaryType) {
+    public void setSummaryType(SummaryTypeDocument summaryType) {
         this.summaryType = summaryType;
     }
 

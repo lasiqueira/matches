@@ -1,8 +1,9 @@
 package com.lucas.matches.service.converter;
 
 import com.lucas.matches.infrastructure.document.MatchDocument;
-import com.lucas.matches.infrastructure.document.SummaryType;
+import com.lucas.matches.infrastructure.document.SummaryTypeDocument;
 import com.lucas.matches.service.domain.Match;
+import com.lucas.matches.service.domain.SummaryType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,8 +23,8 @@ public class MatchConverterTest {
 
     @BeforeAll
     public void setup(){
-        avbMatchDocument = new MatchDocument("1", "t1", "m1", "playerA", "playerB", LocalDateTime.now(), SummaryType.AVB);
-        avbTimeMatchDocument = new MatchDocument("1", "t1", "m1", "playerA", "playerB", LocalDateTime.now(), SummaryType.AVBTIME);
+        avbMatchDocument = new MatchDocument("1", "t1", "m1", "playerA", "playerB", LocalDateTime.now(), SummaryTypeDocument.AVB);
+        avbTimeMatchDocument = new MatchDocument("1", "t1", "m1", "playerA", "playerB", LocalDateTime.now(), SummaryTypeDocument.AVBTIME);
         noSummaryTypeMatchDocument = new MatchDocument("1", "t1", "m1", "playerA", "playerB", LocalDateTime.now(), null);
         matchConverter = new MatchConverter();
     }
@@ -34,7 +35,7 @@ public class MatchConverterTest {
         List<Match> match = matchConverter.convert(List.of(avbMatchDocument));
         assertNotNull(match);
         assertEquals(1, match.size());
-        assertEquals(com.lucas.matches.service.domain.SummaryType.AVB, match.get(0).getSummaryType());
+        assertEquals(SummaryType.AVB, match.get(0).getSummaryType());
     }
 
     @Test
@@ -43,7 +44,7 @@ public class MatchConverterTest {
         List<Match> match = matchConverter.convert(List.of(avbTimeMatchDocument));
         assertNotNull(match);
         assertEquals(1, match.size());
-        assertEquals(com.lucas.matches.service.domain.SummaryType.AVBTIME, match.get(0).getSummaryType());
+        assertEquals(SummaryType.AVBTIME, match.get(0).getSummaryType());
     }
     @Test
     @DisplayName("convert MatchDocument with no SummaryType to Match")
