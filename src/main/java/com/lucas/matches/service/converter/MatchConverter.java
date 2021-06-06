@@ -17,7 +17,7 @@ public class MatchConverter {
         return matches;
     }
 
-    private Match convert(MatchDocument matchDocument){
+    private Match convert(MatchDocument matchDocument) {
         Match match = new Match();
         match.setMatchId(matchDocument.getMatchId());
         match.setStartDate(matchDocument.getStartDate());

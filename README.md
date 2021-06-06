@@ -5,6 +5,7 @@ Matches SpringBoot Service
 # Instructions
 
 ## Setup
+
 You need:
 
 [JDK16+](https://jdk.java.net/)
@@ -21,9 +22,11 @@ Run `gradle clean build` in the command line interface.
 Run `gradle bootBuildImage` in the command line interface.
 
 ## Testing
+
 Run `gradle test` in the command line interface.
 
 ## Running
+
 Run `docker-compose up` in the command line interface.
 
 # description
@@ -50,7 +53,7 @@ time is in future. and "<playerA> vs <playerB>, started x minutes ago" when star
 Please provide a link to a GitHub repo containing the code, including any special instructions. We will be looking for
 code that is clean and maintainable.
 
-# Questions
+# Questions and assumptions
 
 * Can a customer have more than one license? Maybe... I will assume so. Perhaps 2 individual matches or 1 tournament + 1
   individual match or maybe even 2 tournaments, who knows.
@@ -66,3 +69,9 @@ code that is clean and maintainable.
 * If I can receive multiple Licenses of different types, how I am going to pass this as a request parameter and filter
   it? I will assume the License is a String and the format is this: "LicenseType-Match/TournamentId" We'll be able to
   receive an array/list of licenses and we'll parse it and get the correct matches based on that.
+* Can the customer get past matches from days ago? Can he attempt to get matches days in the future? This question is
+  important because if the answer is yes, you can get an overflow while attempting to get the minutes when processing
+  the summary field. Also, you could argue that anything more than 59 minutes might not be useful to the customer
+  instead of hours for example... Or maybe if the match started 500 minutes ago it's probably over. There are many ways
+  to deal with this. Instead of calculating only minutes, you could do it with days/hours/minutes, or maybe the API just
+  gets matches happening today... 
