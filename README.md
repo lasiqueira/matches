@@ -23,7 +23,7 @@ Run `gradle bootBuildImage` in the command line interface.
 
 ## Testing
 
-Run `gradle test` in the command line interface.
+Run `gradle clean test` in the command line interface.
 
 ## Running
 

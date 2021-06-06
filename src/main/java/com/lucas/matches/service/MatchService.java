@@ -7,6 +7,8 @@ import com.lucas.matches.service.domain.License;
 import com.lucas.matches.service.domain.LicenseType;
 import com.lucas.matches.service.domain.Match;
 import com.lucas.matches.service.util.LicenseParser;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
+@CacheConfig(cacheNames = {"match"})
 public class MatchService {
     private final LicenseParser licenseParser;
     private final MatchRepository matchRepository;
@@ -25,7 +28,7 @@ public class MatchService {
         this.matchRepository = matchRepository;
         this.matchConverter = matchConverter;
     }
-
+    @Cacheable(key = "#licenseStringList")
     public List<Match> getMatches(List<String> licenseStringList) {
         List<License> licenses = licenseParser.parse(licenseStringList);
         List<License> tournamentLicenses = licenses.stream().filter(license -> license.getLicenseType().equals(LicenseType.TOURNAMENT)).collect(Collectors.toList());
