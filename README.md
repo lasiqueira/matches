@@ -29,6 +29,10 @@ Run `gradle test` in the command line interface.
 
 Run `docker-compose up` in the command line interface.
 
+## Documentation
+(default: http://localhost:8080)
+server:port/swagger-ui.html
+
 # description
 
 ## Task

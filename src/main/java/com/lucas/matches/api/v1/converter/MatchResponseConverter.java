@@ -43,6 +43,7 @@ public class MatchResponseConverter {
     private String buildAvbTimeSummary(String playerA, String playerB, LocalDateTime startDate){
         String timeSummary = null;
         //what about matches days ago or days in the future? Should these be filtered out or give different time units?
+        //if it's 1 minute, should the text still say 'minutes'?
         if(startDate.isAfter(LocalDateTime.now())){
             timeSummary = String.format("starts in %d minutes", ChronoUnit.MINUTES.between(LocalDateTime.now(), startDate));
         } else if((startDate.isBefore(LocalDateTime.now()))) {
