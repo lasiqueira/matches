@@ -1,8 +1,6 @@
 package com.lucas.matches.api.v1.converter;
 
 import com.lucas.matches.api.v1.dto.MatchResponse;
-import com.lucas.matches.infrastructure.document.MatchDocument;
-import com.lucas.matches.infrastructure.document.SummaryTypeDocument;
 import com.lucas.matches.service.domain.Match;
 import com.lucas.matches.service.domain.SummaryType;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,19 +21,20 @@ public class MatchResponseConverterTest {
     private Match avbTimeAfterMatch;
     private Match avbTimeBeforeMatch;
     private Match noSummaryTypeMatch;
+
     @BeforeAll
-    public void setup(){
+    public void setup() {
         matchResponseConverter = new MatchResponseConverter();
         avbMatch = new Match("m1", LocalDateTime.now(), "playerA", "playerB", SummaryType.AVB);
         //had to add a few seconds otherwise it would report as 1 minute less if it's 59 seconds.
         avbTimeAfterMatch = new Match("m1", LocalDateTime.now().plusMinutes(20).plusSeconds(5), "playerA", "playerB", SummaryType.AVBTIME);
-        avbTimeBeforeMatch = new Match("m1", LocalDateTime.now().minusMinutes(20), "playerA", "playerB",  SummaryType.AVBTIME);
+        avbTimeBeforeMatch = new Match("m1", LocalDateTime.now().minusMinutes(20), "playerA", "playerB", SummaryType.AVBTIME);
         noSummaryTypeMatch = new Match("m1", LocalDateTime.now(), "playerA", "playerB", null);
     }
 
     @Test
     @DisplayName("convert Match with AVB SummaryType to MatchResponse")
-    public void convertMatchAvbToMatchResponse(){
+    public void convertMatchAvbToMatchResponse() {
         List<MatchResponse> matchResponses = matchResponseConverter.convert(List.of(avbMatch));
         assertNotNull(matchResponses);
         assertEquals(1, matchResponses.size());
@@ -44,7 +43,7 @@ public class MatchResponseConverterTest {
 
     @Test
     @DisplayName("convert Match with AVBTime SummaryType with startTime after now to MatchResponse")
-    public void convertMatchAvbTimeAfterToMatchResponse(){
+    public void convertMatchAvbTimeAfterToMatchResponse() {
         List<MatchResponse> matchResponses = matchResponseConverter.convert(List.of(avbTimeAfterMatch));
         assertNotNull(matchResponses);
         assertEquals(1, matchResponses.size());
@@ -53,7 +52,7 @@ public class MatchResponseConverterTest {
 
     @Test
     @DisplayName("convert Match with AVBTime SummaryType with startTime before now to MatchResponse")
-    public void convertMatchAvbTimeBeforeToMatchResponse(){
+    public void convertMatchAvbTimeBeforeToMatchResponse() {
         List<MatchResponse> matchResponses = matchResponseConverter.convert(List.of(avbTimeBeforeMatch));
         assertNotNull(matchResponses);
         assertEquals(1, matchResponses.size());
@@ -62,7 +61,7 @@ public class MatchResponseConverterTest {
 
     @Test
     @DisplayName("convert Match with no SummaryType to MatchResponse")
-    public void convertMatchNoSummaryTypeToMatchResponse(){
+    public void convertMatchNoSummaryTypeToMatchResponse() {
         List<MatchResponse> matchResponses = matchResponseConverter.convert(List.of(noSummaryTypeMatch));
         assertNotNull(matchResponses);
         assertEquals(1, matchResponses.size());
@@ -71,7 +70,7 @@ public class MatchResponseConverterTest {
 
     @Test
     @DisplayName("convert empty List")
-    public void convertEmptyList(){
+    public void convertEmptyList() {
         List<MatchResponse> matchResponses = matchResponseConverter.convert(new ArrayList<>());
         assertNotNull(matchResponses);
         assertEquals(0, matchResponses.size());
