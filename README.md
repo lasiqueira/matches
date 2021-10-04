@@ -10,7 +10,7 @@ You need:
 
 [JDK16+](https://jdk.java.net/)
 
-[Gradle 7.0.2+](https://gradle.org/releases/)
+[Gradle 7.2+](https://gradle.org/releases/)
 (Alternatively you can use the gradle wrapper with `gradlew` instead of the `gradle` command)
 
 to build and run this project.
