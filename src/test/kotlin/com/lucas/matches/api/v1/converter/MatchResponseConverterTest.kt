@@ -7,11 +7,11 @@ import java.time.LocalDateTime
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MatchResponseConverterTest {
-    private var matchResponseConverter: MatchResponseConverter? = null
-    private var avbMatch: Match? = null
-    private var avbTimeAfterMatch: Match? = null
-    private var avbTimeBeforeMatch: Match? = null
-    private var noSummaryTypeMatch: Match? = null
+    private lateinit var matchResponseConverter: MatchResponseConverter
+    private lateinit var avbMatch: Match
+    private lateinit var avbTimeAfterMatch: Match
+    private lateinit var avbTimeBeforeMatch: Match
+    private lateinit var noSummaryTypeMatch: Match
     @BeforeAll
     fun setup() {
         matchResponseConverter = MatchResponseConverter()
@@ -27,7 +27,7 @@ class MatchResponseConverterTest {
     @Test
     @DisplayName("convert Match with AVB SummaryType to MatchResponse")
     fun convertMatchAvbToMatchResponse() {
-        val matchResponses = matchResponseConverter!!.convert(listOf(avbMatch))
+        val matchResponses = matchResponseConverter.convert(listOf(avbMatch))
         Assertions.assertNotNull(matchResponses)
         Assertions.assertEquals(1, matchResponses.size)
         Assertions.assertEquals("playerA vs playerB", matchResponses[0].summary)
@@ -36,7 +36,7 @@ class MatchResponseConverterTest {
     @Test
     @DisplayName("convert Match with AVBTime SummaryType with startTime after now to MatchResponse")
     fun convertMatchAvbTimeAfterToMatchResponse() {
-        val matchResponses = matchResponseConverter!!.convert(listOf(avbTimeAfterMatch))
+        val matchResponses = matchResponseConverter.convert(listOf(avbTimeAfterMatch))
         Assertions.assertNotNull(matchResponses)
         Assertions.assertEquals(1, matchResponses.size)
         Assertions.assertEquals("playerA vs playerB, starts in 20 minutes", matchResponses[0].summary)
@@ -45,7 +45,7 @@ class MatchResponseConverterTest {
     @Test
     @DisplayName("convert Match with AVBTime SummaryType with startTime before now to MatchResponse")
     fun convertMatchAvbTimeBeforeToMatchResponse() {
-        val matchResponses = matchResponseConverter!!.convert(listOf(avbTimeBeforeMatch))
+        val matchResponses = matchResponseConverter.convert(listOf(avbTimeBeforeMatch))
         Assertions.assertNotNull(matchResponses)
         Assertions.assertEquals(1, matchResponses.size)
         Assertions.assertEquals("playerA vs playerB, started 20 minutes ago", matchResponses[0].summary)
@@ -54,16 +54,16 @@ class MatchResponseConverterTest {
     @Test
     @DisplayName("convert Match with no SummaryType to MatchResponse")
     fun convertMatchNoSummaryTypeToMatchResponse() {
-        val matchResponses = matchResponseConverter!!.convert(listOf(noSummaryTypeMatch))
+        val matchResponses = matchResponseConverter.convert(listOf(noSummaryTypeMatch))
         Assertions.assertNotNull(matchResponses)
         Assertions.assertEquals(1, matchResponses.size)
-        Assertions.assertTrue(matchResponses[0].summary!!.isEmpty())
+        Assertions.assertTrue(matchResponses[0].summary.isEmpty())
     }
 
     @Test
     @DisplayName("convert empty List")
     fun convertEmptyList() {
-        val matchResponses = matchResponseConverter!!.convert(ArrayList())
+        val matchResponses = matchResponseConverter.convert(ArrayList())
         Assertions.assertNotNull(matchResponses)
         Assertions.assertEquals(0, matchResponses.size)
     }

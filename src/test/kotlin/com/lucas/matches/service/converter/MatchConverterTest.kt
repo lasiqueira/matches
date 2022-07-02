@@ -8,10 +8,10 @@ import java.time.LocalDateTime
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MatchConverterTest {
-    private var avbMatchDocument: MatchDocument? = null
-    private var avbTimeMatchDocument: MatchDocument? = null
-    private var noSummaryTypeMatchDocument: MatchDocument? = null
-    private var matchConverter: MatchConverter? = null
+    private lateinit var avbMatchDocument: MatchDocument
+    private lateinit var avbTimeMatchDocument: MatchDocument
+    private lateinit var noSummaryTypeMatchDocument: MatchDocument
+    private lateinit var matchConverter: MatchConverter
     @BeforeAll
     fun setup() {
         avbMatchDocument =
@@ -25,7 +25,7 @@ class MatchConverterTest {
     @Test
     @DisplayName("convert MatchDocument with AVB SummaryType to Match")
     fun convertMatchDocumentAvbToMatch() {
-        val match = matchConverter!!.convert(listOf(avbMatchDocument))
+        val match = matchConverter.convert(listOf(avbMatchDocument))
         Assertions.assertNotNull(match)
         Assertions.assertEquals(1, match.size)
         Assertions.assertEquals(SummaryType.AVB, match[0].summaryType)
@@ -34,7 +34,7 @@ class MatchConverterTest {
     @Test
     @DisplayName("convert MatchDocument with AVBTime SummaryType to Match")
     fun convertMatchDocumentAvbTimeToMatch() {
-        val match = matchConverter!!.convert(listOf(avbTimeMatchDocument))
+        val match = matchConverter.convert(listOf(avbTimeMatchDocument))
         Assertions.assertNotNull(match)
         Assertions.assertEquals(1, match.size)
         Assertions.assertEquals(SummaryType.AVBTIME, match[0].summaryType)
@@ -43,7 +43,7 @@ class MatchConverterTest {
     @Test
     @DisplayName("convert MatchDocument with no SummaryType to Match")
     fun convertMatchDocumentNoSummaryTypeToMatch() {
-        val match = matchConverter!!.convert(listOf(noSummaryTypeMatchDocument))
+        val match = matchConverter.convert(listOf(noSummaryTypeMatchDocument))
         Assertions.assertNotNull(match)
         Assertions.assertEquals(1, match.size)
         Assertions.assertNull(match[0].summaryType)
@@ -52,7 +52,7 @@ class MatchConverterTest {
     @Test
     @DisplayName("convert empty List")
     fun convertEmptyList() {
-        val match = matchConverter!!.convert(ArrayList())
+        val match = matchConverter.convert(ArrayList())
         Assertions.assertNotNull(match)
         Assertions.assertEquals(0, match.size)
     }

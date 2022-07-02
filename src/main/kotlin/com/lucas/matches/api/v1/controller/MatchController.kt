@@ -16,7 +16,7 @@ class MatchController(
     private val matchResponseConverter: MatchResponseConverter
 ) {
     @GetMapping("")
-    fun getMatches(@RequestParam licenses: List<String>): ResponseEntity<List<MatchResponse?>?> {
+    fun getMatches(@RequestParam licenses: List<String>): ResponseEntity<List<MatchResponse>> {
         return ResponseEntity.ok(matchResponseConverter.convert(matchService.getMatches(licenses)))
     }
 }

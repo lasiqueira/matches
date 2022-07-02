@@ -6,45 +6,42 @@ import com.lucas.matches.service.domain.SummaryType
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 import java.time.temporal.ChronoUnit
-import java.util.function.Consumer
 
 @Component
 class MatchResponseConverter {
-    fun convert(matches: List<Match?>?): List<MatchResponse> {
-        val matchResponses: MutableList<MatchResponse> = ArrayList()
-        matches!!.forEach(Consumer { match: Match? -> matchResponses.add(convert(match)) })
-        return matchResponses
+    fun convert(matches: List<Match>): List<MatchResponse> {
+        return matches.map { convert(it) }
     }
 
-    private fun convert(match: Match?): MatchResponse {
-        val matchResponse = MatchResponse()
-        matchResponse.matchId = match?.matchId
-        matchResponse.startDate = match?.startDate
-        matchResponse.playerA = match?.playerA
-        matchResponse.playerB = match?.playerB
-        matchResponse.summary = buildSummary(match)
-        return matchResponse
+    private fun convert(match: Match): MatchResponse {
+        return MatchResponse(
+            match.matchId,
+            match.startDate,
+            match.playerA,
+            match.playerB,
+            buildSummary(match)
+        )
     }
 
-    private fun buildSummary(match: Match?): String {
+    private fun buildSummary(match: Match): String {
         var summary = ""
-        if (SummaryType.AVB == match?.summaryType) {
+        if (SummaryType.AVB == match.summaryType) {
             summary = buildAvbSummary(match.playerA, match.playerB)
-        } else if (SummaryType.AVBTIME == match?.summaryType) {
+        } else if (SummaryType.AVBTIME == match.summaryType) {
             summary = buildAvbTimeSummary(match.playerA, match.playerB, match.startDate)
         }
         return summary
     }
 
-    private fun buildAvbSummary(playerA: String?, playerB: String?): String {
+    private fun buildAvbSummary(playerA: String, playerB: String): String {
         return String.format("%s vs %s", playerA, playerB)
     }
 
-    private fun buildAvbTimeSummary(playerA: String?, playerB: String?, startDate: LocalDateTime?): String {
+    private fun buildAvbTimeSummary(playerA: String, playerB: String, startDate: LocalDateTime): String {
         var timeSummary: String? = null
         //what about matches days ago or days in the future? Should these be filtered out or give different time units?
         //if it's 1 minute, should the text still say 'minutes'?
-        if (startDate!!.isAfter(LocalDateTime.now())) {
+        if (startDate.isAfter(LocalDateTime.now())) {
             timeSummary =
                 String.format("starts in %d minutes", ChronoUnit.MINUTES.between(LocalDateTime.now(), startDate))
         } else if (startDate.isBefore(LocalDateTime.now())) {

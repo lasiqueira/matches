@@ -6,34 +6,14 @@ import java.time.LocalDateTime
 import java.util.*
 
 @Document(collection = "matches")
-class MatchDocument {
-    @MongoId
-    var id: String? = null
-    var tournamentId: String? = null
-    var matchId: String? = null
-    var playerA: String? = null
-    var playerB: String? = null
-    var startDate: LocalDateTime? = null
-    var summaryType: SummaryTypeDocument? = null
+class MatchDocument(@MongoId var id: String?,
+                    var tournamentId: String,
+                    var matchId: String,
+                    var playerA: String,
+                    var playerB: String,
+                    var startDate: LocalDateTime,
+                    var summaryType: SummaryTypeDocument?) {
 
-    constructor() {}
-    constructor(
-        id: String?,
-        tournamentId: String?,
-        matchId: String?,
-        playerA: String?,
-        playerB: String?,
-        startDate: LocalDateTime?,
-        summaryType: SummaryTypeDocument?
-    ) {
-        this.id = id
-        this.tournamentId = tournamentId
-        this.matchId = matchId
-        this.playerA = playerA
-        this.playerB = playerB
-        this.startDate = startDate
-        this.summaryType = summaryType
-    }
 
     override fun equals(o: Any?): Boolean {
         if (this === o) return true

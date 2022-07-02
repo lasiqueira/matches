@@ -12,23 +12,23 @@ import java.util.function.Consumer
 class LicenseParser {
     private val logger: Logger = LoggerFactory.getLogger(LicenseParser::class.java)
     fun parse(licenseStringList: List<String>): List<License> {
-        val licenses: MutableList<License> = ArrayList()
-        licenseStringList.forEach(Consumer { licenseString: String -> licenses.add(parse(licenseString)) })
-        return licenses
+        return licenseStringList.mapNotNull { parse(it)}
     }
 
-    private fun parse(licenseString: String): License {
+    private fun parse(licenseString: String): License? {
         val licenseArray = licenseString.split("-").toTypedArray()
         if (licenseArray.size < 2) {
             logger.error("Invalid license: $licenseString")
             throw InvalidLicenseException("Invalid license.")
         }
-        val license = License(LicenseType.Companion.value(licenseArray[0]), licenseArray[1])
-        if (license.licenseType == null || license.id == null || license.id!!.isEmpty()) {
+        val licenseType = LicenseType.value(licenseArray[0])
+
+        if(licenseType == null){
             logger.error("Invalid license: $licenseString")
             throw InvalidLicenseException("Invalid license.")
         }
-        return license
+        return  License(licenseType, licenseArray[1])
+
     }
 
 }

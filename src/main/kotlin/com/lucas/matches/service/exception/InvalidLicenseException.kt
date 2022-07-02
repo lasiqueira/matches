@@ -1,3 +1,3 @@
 package com.lucas.matches.service.exception
 
-class InvalidLicenseException(msg: String?) : RuntimeException(msg)
+class InvalidLicenseException(msg: String) : RuntimeException(msg)

@@ -27,7 +27,6 @@ class MatchErrorHandler {
     }
 
     private fun error(exception: Exception, httpStatus: HttpStatus): ResponseEntity<APIError> {
-        val message = exception.message
-        return ResponseEntity(APIError(message), httpStatus)
+        return ResponseEntity(APIError(exception.message!!), httpStatus)
     }
 }

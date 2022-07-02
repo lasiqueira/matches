@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.cache.annotation.CacheConfig
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
-import java.util.stream.Collectors
-import java.util.stream.Stream
 
 @Service
 @CacheConfig(cacheNames = ["match"])
@@ -23,45 +21,35 @@ class MatchService(licenseParser: LicenseParser, matchRepository: MatchRepositor
     private val matchRepository: MatchRepository
     private val matchConverter: MatchConverter
     @Cacheable(key = "#licenseStringList")
-    fun getMatches(licenseStringList: List<String>): List<Match?>? {
+    fun getMatches(licenseStringList: List<String>): List<Match> {
         logger.info("Parsing Licenses...")
         logger.debug(licenseStringList.toString())
         val licenses = licenseParser.parse(licenseStringList)
         logger.info("Fetching matches...")
         val tournamentLicenses =
-            licenses!!.stream().filter { license: License? -> license?.licenseType == LicenseType.TOURNAMENT }
-                .collect(Collectors.toList())
+            licenses.filter { it.licenseType == LicenseType.TOURNAMENT }
+
         val matchLicenses =
-            licenses.stream().filter { license: License? -> license?.licenseType == LicenseType.MATCH }
-                .collect(Collectors.toList())
+            licenses.filter {it.licenseType == LicenseType.MATCH }
         return matchConverter.convert(
-            Stream.concat(
-                getMatchesByTournamentId(tournamentLicenses)!!.stream(),
-                getMatchesByMatchId(matchLicenses)!!.stream()
-            ).collect(Collectors.toList())
-        )
+                getMatchesByTournamentId(tournamentLicenses)+
+                getMatchesByMatchId(matchLicenses)
+            )
+
     }
 
-    private fun getMatchesByTournamentId(tournamentLicenses: List<License?>): List<MatchDocument?>? {
-        var matchDocuments: List<MatchDocument?>? = ArrayList()
-        if (tournamentLicenses.size > 0) {
-            logger.info("Fetching Matches by Tournament ID...")
-            val ids = tournamentLicenses.stream().map { obj: License? -> obj?.id }
-                .collect(Collectors.toList())
-            matchDocuments = matchRepository.findByTournamentIdIn(ids)
-        }
-        return matchDocuments
+    private fun getMatchesByTournamentId(tournamentLicenses: List<License>): List<MatchDocument> {
+        logger.info("Fetching Matches by Tournament ID...")
+        val ids = tournamentLicenses.map { it.id }
+        return matchRepository.findByTournamentIdIn(ids)
+
+
     }
 
-    private fun getMatchesByMatchId(matchLicenses: List<License?>): List<MatchDocument?>? {
-        var matchDocuments: List<MatchDocument?>? = ArrayList()
-        if (matchLicenses.size > 0) {
-            logger.info("Fetching Matches by Match ID...")
-            val ids = matchLicenses.stream().map { obj: License? -> obj?.id }
-                .collect(Collectors.toList())
-            matchDocuments = matchRepository.findByMatchIdIn(ids)
-        }
-        return matchDocuments
+    private fun getMatchesByMatchId(matchLicenses: List<License>): List<MatchDocument> {
+        logger.info("Fetching Matches by Match ID...")
+        val ids = matchLicenses.map { it.id }
+        return matchRepository.findByMatchIdIn(ids)
     }
 
     init {

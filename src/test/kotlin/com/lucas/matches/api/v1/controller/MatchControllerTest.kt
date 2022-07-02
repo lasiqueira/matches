@@ -31,53 +31,53 @@ import java.time.LocalDateTime
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class MatchControllerTest {
     @Autowired
-    private val objectMapper: ObjectMapper? = null
+    private lateinit var objectMapper: ObjectMapper
 
     @Autowired
-    private val mockMvc: MockMvc? = null
+    private lateinit var mockMvc: MockMvc
 
     @MockBean
-    private val matchService: MatchService? = null
+    private lateinit var matchService: MatchService
 
     @MockBean
-    private val matchResponseConverter: MatchResponseConverter? = null
-    private var matchLicenseStringList: List<String>? = null
-    private var tournamentLicenseStringList: List<String>? = null
-    private var mixedLicenseStringList: List<String>? = null
-    private var invalidLicenseStringList: List<String>? = null
-    private var matchIdMatchList: List<Match?>? = null
-    private var tournamentIdMatchList: List<Match?>? = null
-    private var mixedMatchList: List<Match?>? = null
-    private var matchIdMatchResponseList: List<MatchResponse>? = null
-    private var tournamentIdMatchResponseList: List<MatchResponse>? = null
-    private var mixedMatchResponseList: List<MatchResponse>? = null
+    private lateinit var matchResponseConverter: MatchResponseConverter
+    private lateinit var matchLicenseStringList: List<String>
+    private lateinit var tournamentLicenseStringList: List<String>
+    private lateinit var mixedLicenseStringList: List<String>
+    private lateinit var invalidLicenseStringList: List<String>
+    private lateinit var matchIdMatchList: List<Match>
+    private lateinit var tournamentIdMatchList: List<Match>
+    private lateinit var mixedMatchList: List<Match>
+    private lateinit var matchIdMatchResponseList: List<MatchResponse>
+    private lateinit var tournamentIdMatchResponseList: List<MatchResponse>
+    private lateinit var mixedMatchResponseList: List<MatchResponse>
     @BeforeAll
     fun setup() {
-        matchLicenseStringList = java.util.List.of("MATCH-m1", "MATCH-m2")
-        tournamentLicenseStringList = java.util.List.of("TOURNAMENT-t1", "TOURNAMENT-t2")
-        mixedLicenseStringList = java.util.List.of("TOURNAMENT-t1", "MATCH-m4")
-        invalidLicenseStringList = java.util.List.of("invalid")
-        matchIdMatchList = java.util.List.of(
+        matchLicenseStringList = listOf("MATCH-m1", "MATCH-m2")
+        tournamentLicenseStringList = listOf("TOURNAMENT-t1", "TOURNAMENT-t2")
+        mixedLicenseStringList = listOf("TOURNAMENT-t1", "MATCH-m4")
+        invalidLicenseStringList = listOf("invalid")
+        matchIdMatchList = listOf(
             Match("m1", LocalDateTime.now(), "playerA", "playerB", SummaryType.AVB),
             Match("m2", LocalDateTime.now(), "playerA", "playerB", SummaryType.AVBTIME)
         )
-        tournamentIdMatchList = java.util.List.of(
+        tournamentIdMatchList = listOf(
             Match("m1", LocalDateTime.now(), "playerA", "playerB", SummaryType.AVB),
             Match("m3", LocalDateTime.now(), "playerA", "playerB", null)
         )
-        mixedMatchList = java.util.List.of(
+        mixedMatchList = listOf(
             Match("m1", LocalDateTime.now(), "playerA", "playerB", SummaryType.AVB),
             Match("m4", LocalDateTime.now(), "playerA", "playerB", SummaryType.AVBTIME)
         )
-        matchIdMatchResponseList = java.util.List.of(
+        matchIdMatchResponseList = listOf(
             MatchResponse("m1", LocalDateTime.now(), "playerA", "playerB", "playerA vs playerB"),
             MatchResponse("m2", LocalDateTime.now(), "playerA", "playerB", "playerA vs playerB, started 1 minutes ago")
         )
-        tournamentIdMatchResponseList = java.util.List.of(
+        tournamentIdMatchResponseList = listOf(
             MatchResponse("m1", LocalDateTime.now(), "playerA", "playerB", "playerA vs playerB"),
             MatchResponse("m3", LocalDateTime.now(), "playerA", "playerB", "")
         )
-        mixedMatchResponseList = java.util.List.of(
+        mixedMatchResponseList = listOf(
             MatchResponse("m1", LocalDateTime.now(), "playerA", "playerB", "playerA vs playerB"),
             MatchResponse("m4", LocalDateTime.now(), "playerA", "playerB", "playerA vs playerB, started 1 minutes ago")
         )
@@ -89,13 +89,13 @@ class MatchControllerTest {
     val matchesWithMatchLicense: Unit
         get() {
             Mockito.`when`(
-                matchService!!.getMatches(
-                    matchLicenseStringList!!
+                matchService.getMatches(
+                    matchLicenseStringList
                 )
             ).thenReturn(matchIdMatchList)
-            Mockito.`when`(matchResponseConverter!!.convert(matchIdMatchList)).thenReturn(matchIdMatchResponseList)
+            Mockito.`when`(matchResponseConverter.convert(matchIdMatchList)).thenReturn(matchIdMatchResponseList)
             val params: MultiValueMap<String, String> = LinkedMultiValueMap()
-            params.addAll("licenses", matchLicenseStringList!!)
+            params.addAll("licenses", matchLicenseStringList)
             mockMvc!!.perform(
                 MockMvcRequestBuilders.get("/v1/match")
                     .params(params)
@@ -104,7 +104,7 @@ class MatchControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize<Any>(2)))
                 .andExpect(
-                    MockMvcResultMatchers.content().string(objectMapper!!.writeValueAsString(matchIdMatchResponseList))
+                    MockMvcResultMatchers.content().string(objectMapper.writeValueAsString(matchIdMatchResponseList))
                 )
         }
 
@@ -114,15 +114,15 @@ class MatchControllerTest {
     val matchesWithTournamentLicense: Unit
         get() {
             Mockito.`when`(
-                matchService!!.getMatches(
-                    tournamentLicenseStringList!!
+                matchService.getMatches(
+                    tournamentLicenseStringList
                 )
             ).thenReturn(tournamentIdMatchList)
-            Mockito.`when`(matchResponseConverter!!.convert(tournamentIdMatchList))
+            Mockito.`when`(matchResponseConverter.convert(tournamentIdMatchList))
                 .thenReturn(tournamentIdMatchResponseList)
             val params: MultiValueMap<String, String> = LinkedMultiValueMap()
-            params.addAll("licenses", tournamentLicenseStringList!!)
-            mockMvc!!.perform(
+            params.addAll("licenses", tournamentLicenseStringList)
+            mockMvc.perform(
                 MockMvcRequestBuilders.get("/v1/match")
                     .params(params)
                     .contentType(MediaType.APPLICATION_JSON)
@@ -131,7 +131,7 @@ class MatchControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize<Any>(2)))
                 .andExpect(
                     MockMvcResultMatchers.content()
-                        .string(objectMapper!!.writeValueAsString(tournamentIdMatchResponseList))
+                        .string(objectMapper.writeValueAsString(tournamentIdMatchResponseList))
                 )
         }
 
@@ -141,14 +141,14 @@ class MatchControllerTest {
     val matchesWithMixedLicense: Unit
         get() {
             Mockito.`when`(
-                matchService!!.getMatches(
-                    mixedLicenseStringList!!
+                matchService.getMatches(
+                    mixedLicenseStringList
                 )
             ).thenReturn(mixedMatchList)
-            Mockito.`when`(matchResponseConverter!!.convert(mixedMatchList)).thenReturn(mixedMatchResponseList)
+            Mockito.`when`(matchResponseConverter.convert(mixedMatchList)).thenReturn(mixedMatchResponseList)
             val params: MultiValueMap<String, String> = LinkedMultiValueMap()
-            params.addAll("licenses", mixedLicenseStringList!!)
-            mockMvc!!.perform(
+            params.addAll("licenses", mixedLicenseStringList)
+            mockMvc.perform(
                 MockMvcRequestBuilders.get("/v1/match")
                     .params(params)
                     .contentType(MediaType.APPLICATION_JSON)
@@ -156,7 +156,7 @@ class MatchControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize<Any>(2)))
                 .andExpect(
-                    MockMvcResultMatchers.content().string(objectMapper!!.writeValueAsString(mixedMatchResponseList))
+                    MockMvcResultMatchers.content().string(objectMapper.writeValueAsString(mixedMatchResponseList))
                 )
         }
 
@@ -167,7 +167,7 @@ class MatchControllerTest {
     @get:Test
     val matchesWithNoLicense: Unit
         get() {
-            mockMvc!!.perform(
+            mockMvc.perform(
                 MockMvcRequestBuilders.get("/v1/match")
                     .contentType(MediaType.APPLICATION_JSON)
             )
@@ -182,13 +182,13 @@ class MatchControllerTest {
     val matchesWithInvalidLicense: Unit
         get() {
             Mockito.`when`(
-                matchService!!.getMatches(
-                    invalidLicenseStringList!!
+                matchService.getMatches(
+                    invalidLicenseStringList
                 )
             ).thenThrow(InvalidLicenseException("Invalid license."))
             val params: MultiValueMap<String, String> = LinkedMultiValueMap()
-            params.addAll("licenses", invalidLicenseStringList!!)
-            mockMvc!!.perform(
+            params.addAll("licenses", invalidLicenseStringList)
+            mockMvc.perform(
                 MockMvcRequestBuilders.get("/v1/match")
                     .params(params)
                     .contentType(MediaType.APPLICATION_JSON)
@@ -202,20 +202,20 @@ class MatchControllerTest {
     val emptyList: Unit
         get() {
             Mockito.`when`(
-                matchService!!.getMatches(
-                    matchLicenseStringList!!
+                matchService.getMatches(
+                    matchLicenseStringList
                 )
             ).thenReturn(ArrayList())
-            Mockito.`when`(matchResponseConverter!!.convert(ArrayList())).thenReturn(ArrayList())
+            Mockito.`when`(matchResponseConverter.convert(ArrayList())).thenReturn(ArrayList())
             val params: MultiValueMap<String, String> = LinkedMultiValueMap()
-            params.addAll("licenses", matchLicenseStringList!!)
-            mockMvc!!.perform(
+            params.addAll("licenses", matchLicenseStringList)
+            mockMvc.perform(
                 MockMvcRequestBuilders.get("/v1/match")
                     .params(params)
                     .contentType(MediaType.APPLICATION_JSON)
             )
                 .andExpect(MockMvcResultMatchers.status().isOk)
                 .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize<Any>(0)))
-                .andExpect(MockMvcResultMatchers.content().string(objectMapper!!.writeValueAsString(ArrayList<Any>())))
+                .andExpect(MockMvcResultMatchers.content().string(objectMapper.writeValueAsString(ArrayList<Any>())))
         }
 }
