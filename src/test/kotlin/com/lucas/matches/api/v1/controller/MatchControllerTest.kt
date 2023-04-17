@@ -96,7 +96,7 @@ class MatchControllerTest {
             Mockito.`when`(matchResponseConverter.convert(matchIdMatchList)).thenReturn(matchIdMatchResponseList)
             val params: MultiValueMap<String, String> = LinkedMultiValueMap()
             params.addAll("licenses", matchLicenseStringList)
-            mockMvc!!.perform(
+            mockMvc.perform(
                 MockMvcRequestBuilders.get("/v1/match")
                     .params(params)
                     .contentType(MediaType.APPLICATION_JSON)

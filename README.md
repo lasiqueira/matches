@@ -8,9 +8,9 @@ Matches SpringBoot Service
 
 You need:
 
-[JDK16+](https://jdk.java.net/)
+[JDK17+](https://jdk.java.net/)
 
-[Gradle 7.2+](https://gradle.org/releases/)
+[Gradle 8.1+](https://gradle.org/releases/)
 (Alternatively you can use the gradle wrapper with `gradlew` instead of the `gradle` command)
 
 to build and run this project.
@@ -20,13 +20,13 @@ initial data. As default, I'm inserting 5 matches, but more can be added if need
 
 ## Building
 
-Run `gradle clean build` in the command line interface.
+Run `./gradlew clean build` in the command line interface.
 
-Run `gradle bootBuildImage` in the command line interface.
+Run `./gradlew bootBuildImage` in the command line interface.
 
 ## Testing
 
-Run `gradle clean test` in the command line interface.
+Run `./gradlew clean test` in the command line interface.
 
 ## Running
 
