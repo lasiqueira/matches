@@ -13,7 +13,7 @@ import java.io.IOException
 class MatchErrorHandler {
     @ExceptionHandler(ResponseStatusException::class)
     fun apiException(e: ResponseStatusException): ResponseEntity<APIError> {
-        return error(e, e.status)
+        return error(e, HttpStatus.resolve(e.statusCode.value())!!)
     }
 
     @ExceptionHandler(InterruptedException::class, IOException::class)
